@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ScheduleEvent.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 
 namespace ScheduleEvent
 {
@@ -37,7 +38,14 @@ namespace ScheduleEvent
             services.AddEntityFrameworkSqlServer()
                .AddDbContext<ScheduleDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddMvc();
+            // format the camel case for api controller
+            services.AddMvc()
+                .AddJsonOptions(config =>
+                {
+                    config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                });
+
+            services.AddSingleton<IScheduleRepository, ScheduleRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
