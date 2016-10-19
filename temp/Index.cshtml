@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<link href="~/lib/fullcalendar/dist/fullcalendar.css" rel="stylesheet" />
+
+@section scripts
+{
+    <script src="~/lib/angular/angular.min.js"></script>
+    <script src="~/lib/moment/moment.js"></script>
+    <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
+    <script src="~/js/app-schedule.js"></script>
+    <script src="~/js/scheduleController.js"></script>
+}
+
+@*content*@
+
+<div ng-app="app-schedule">
+    <div ng-controller="scheduleController as vm">
+        <div class="text-danger" ng-show="vm.errorMessage">{{ vm.errorMessage }}</div>
+
+        <table class="table">
+            <tr ng-repeat="event in vm.events">
+                <td>{{ event.Title }}</td>
+                <td>{{ event.Description }}</td>
+                <td>{{ event.StartAt | date:'dd-MM-yyyy hh:mm'}}</td>
+                <td>{{ event.EndAt | date:'dd-MM-yyyy hh:mm'}}</td>
+                <td>{{vm.Message}}</td>
+                <td>
+                    <a href="#" class="btn btn-primary">Manage</a>
+                </td>
+            </tr>
+        </table>
+
+
+
+        <div id='calendar'>
+            @*show the calendar*@
+        </div>
+
+        <!-- Modal -->
+        <div class="container">
+
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Modal Header</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="error">{{Message}}</div>
+                            <div class="form-group">
+                                <label>Event Title : </label>
+                                <input type="text" ng-model="newEvent.Title" autofocus class="form-control"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Description : </label>
+                                <input type="text" ng-model="newEvent.Description" class="form-control"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label>StartAt : </label>
+                                <input type="text" ng-model="newEvent.StartAt" class="form-control"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label>EndAt : </label>
+                                <input type="text" ng-model="newEvent.EndAt" class="form-control"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label>IsFullDay : </label>
+                                <input type="checkbox" ng-model="newEvent.IsFullDay"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Time Slot : </label>
+                                <span></span>
+                                <span>{{newEvent.StartAt}} - {{newEvent.EndAt}}</span>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="button" ng-submit="vm.addEvent()">AddEvent</button>
+                            <input type="button" value="Cancel" class="btn btn-danger" ng-show="NewEvent.EventID > 0" ng-click="delete()"/>
+                            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
