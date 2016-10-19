@@ -27,10 +27,10 @@ namespace ScheduleEvent.Controllers.Api
         }
 
         // GET api/values/5
-        [HttpGet("{id}",Name = "GetEvent")]
+        [HttpGet("{id}", Name = "GetEvent")]
         public async Task<IActionResult> GetById(int id)
         {
-            var item =await _repository.Find(id);
+            var item = await _repository.Find(id);
             if (item == null)
             {
                 return NotFound();
@@ -40,21 +40,40 @@ namespace ScheduleEvent.Controllers.Api
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<IActionResult> Create([FromBody]Event item)
         {
-
+            if (item == null)
+            {
+                return BadRequest();
+            }
+            await _repository.Add(item);
+            return CreatedAtRoute("GetEvent", new { id = item.EventId }, item);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<IActionResult> Update(int id, [FromBody]Event item)
         {
+            if (item == null || item.EventId != id)
+            {
+                return BadRequest();
+            }
+
+            var e = _repository.Find(id);
+            if (e == null)
+            {
+                return NotFound();
+            }
+
+            await _repository.Update(item);
+            return new NoContentResult();
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+
         }
     }
 }

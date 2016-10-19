@@ -17,7 +17,7 @@ namespace ScheduleEvent.Models
         {
             _context = context;
         }
-        public async void Add(Event item)
+        public async Task Add(Event item)
         {
             _context.Events.Add(item);
             await _context.SaveChangesAsync();
@@ -33,9 +33,10 @@ namespace ScheduleEvent.Models
             return await _context.Events.FirstOrDefaultAsync(x => x.EventId == eventId);
         }
 
-        public async Task<Event> Remove(int eventId)
+        public void Remove(int eventId)
         {
-            return await _context.Events.FirstOrDefaultAsync(x => x.EventId == eventId);
+            var eventForDelete = _context.Events.FirstOrDefaultAsync(x => x.EventId == eventId);
+            //Todo
         }
 
         public async Task Update(Event item)
